@@ -58,15 +58,15 @@ br#"##
 #timestamp = true
 ## Specify timestamp format
 ## See below for detailed documentation
-## https://docs.rs/chrono/0.4.11/chrono/format/strftime/index.html
-#timestamp_format = "[%Y-%m-%d %H:%M:%S %Z] "
+## https://time-rs.github.io/book/api/format-description.html
+#timestamp_format = "[[[year]-[month]-[day] [hour]:[minute]:[second] [offset_hour sign:mandatory]] "
 
 ## Auto save log
 #auto_save_log = true
 ## Specify log file name format
 ## See below for detailed documentation
-## https://docs.rs/chrono/0.4.11/chrono/format/strftime/index.html
-#log_format = "%Y%m%d_%H%M%S.log"
+## https://time-rs.github.io/book/api/format-description.html
+#log_format = "[year]-[month]-[day]_[hour]:[minute]:[second].log"
 ## Destination folder for log file
 #log_destination = "./"
 

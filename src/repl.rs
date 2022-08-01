@@ -11,7 +11,7 @@ use crate::getch::{Getch, Key};
 use crate::default;
 use crate::negotiation;
 
-use chrono::Local;
+use time::{format_description, OffsetDateTime};
 
 pub trait Send {
     fn send(&mut self, s: &[u8]);
@@ -574,7 +574,9 @@ where
 }
 
 fn format_timestamp(timestamp_format: &str) -> String {
-    Local::now().format(timestamp_format).to_string()
+    let fmt = format_description::parse(timestamp_format).expect("failed to parse timestamp format");
+    let date_time = OffsetDateTime::now_local().expect("failed to determine local time offset");
+    date_time.format(&fmt).expect("failed to format utc timestamp")
 }
 
 fn string_from_utf8_appearance(log_buf: &mut String, serial_buf: &[u8]) {

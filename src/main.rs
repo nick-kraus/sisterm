@@ -138,7 +138,7 @@ fn main() {
 }
 
 fn parse_arguments(matches: &clap::ArgMatches) -> (flag::Flags, Option<setting::Params>) {
-    use chrono::Local;
+    use time::{format_description, OffsetDateTime};
 
     // If "config file (-c)" is specified
     let config_file = if let Some(file) = matches.value_of("config file") {
@@ -186,10 +186,12 @@ fn parse_arguments(matches: &clap::ArgMatches) -> (flag::Flags, Option<setting::
     } else if let Some(ref params) = params {
         if params.auto_save_log {
             #[cfg(windows)]
-            let fmt = format!("{}\\{}", params.log_destination.trim_end_matches('\\'), params.log_format);
+            let fmt_string = format!("{}\\{}", params.log_destination.trim_end_matches('\\'), params.log_format);
             #[cfg(not(windows))]
-            let fmt = format!("{}/{}", params.log_destination.trim_end_matches('/'), params.log_format);
-            Some(Local::now().format(&fmt).to_string())
+            let fmt_string = format!("{}/{}", params.log_destination.trim_end_matches('/'), params.log_format);
+            let fmt = format_description::parse(&fmt_string).expect("failed to parse 'log_format'");
+            let date_time = OffsetDateTime::now_local().expect("failed to determine local time offset");
+            Some(date_time.format(&fmt).expect("failed to format utc timestamp"))
         } else {
             None
         }
